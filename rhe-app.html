@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App iOS RHÉ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f7f5f0;
+    color: #1c1c1c;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  /* ── En-tête commun ── */
+  .header {
+    border-top: 3px solid #7aa04d;
+    padding-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .header-text {}
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #7aa04d;
+    margin-bottom: 4px;
+  }
+
+  .header-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1c1c1c;
+    line-height: 1.25;
+    font-family: Georgia, serif;
+  }
+
+  .accroche-commune {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2ddd5;
+  }
+
+  .app-store-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #7aa04d;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+  .app-store-link:hover { text-decoration: underline; }
+
+  /* ── Sélecteur de public ── */
+  .selecteur {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .btn-public {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid #7aa04d;
+    border-radius: 0;
+    background: #f7f5f0;
+    color: #7aa04d;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.3;
+  }
+
+  .btn-public.actif {
+    background: #7aa04d;
+    color: #ffffff;
+  }
+
+  .btn-public:hover:not(.actif) {
+    background: #eaf2e0;
+  }
+
+  /* ── Contenu par public ── */
+  .contenu-public { display: none; }
+  .contenu-public.visible { display: block; }
+
+  /* ── Sections (chercheurs) ── */
+  .section {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2ddd5;
+  }
+  .section:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+  .accent-bar {
+    flex-shrink: 0;
+    width: 3px;
+    background: #7aa04d;
+    align-self: stretch;
+  }
+
+  .section-body { flex: 1; }
+
+  .section-titre {
+    font-family: Georgia, serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #5a7a35;
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+
+  .section-texte {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  /* ── Sections pill (scolaires) ── */
+  .pill-titre {
+    display: inline-block;
+    background: #eaf2e0;
+    color: #5a7a35;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 12px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  /* ── Section responsable ── */
+  .responsable-corps {
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.8;
+  }
+
+  .responsable-corps p { margin-bottom: 14px; }
+  .responsable-corps p:last-child { margin-bottom: 0; }
+
+  .responsable-corps a {
+    color: #7aa04d;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .responsable-corps a:hover { text-decoration: underline; }
+
+  /* ── Encadré note ── */
+  .note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: #eaf2e0;
+    border-left: 3px solid #7aa04d;
+  }
+
+  .note-titre {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #5a7a35;
+    margin-bottom: 5px;
+  }
+
+  .note-texte {
+    font-size: 12.5px;
+    color: #5a7a35;
+    line-height: 1.65;
+  }
+
+  /* ── Accroche scolaires ── */
+  .accroche-scolaire {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    color: #5a7a35;
+    line-height: 1.75;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #c8ddb0;
+  }
+
+  .intro-suite {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2ddd5;
+  }
+
+  /* ── Pied de page ── */
+  .footer {
+    margin-top: 36px;
+    padding-top: 14px;
+    border-top: 1px solid #e2ddd5;
+    font-size: 11px;
+    color: #777;
+    font-style: italic;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- En-tête commun -->
+  <div class="header">
+    <div class="header-text">
+      <p class="eyebrow">Application iOS gratuite</p>
+      <p class="header-title">App iOS RHÉ</p>
+    </div>
+  </div>
+
+  <p class="accroche-commune">
+    Depuis juin 2026, la Revue hybride de l'éducation est accessible sur iPhone et iPad. L'app donne accès à l'ensemble du corpus et à plusieurs fonctionnalités conçues pour enrichir la lecture et faire le pont entre la recherche et la pratique.<br><br>
+    <a class="app-store-link" href="https://apps.apple.com/ca/app/revue-hybride-de-l%C3%A9ducation/id6777507627?l=fr-CA">↓ Télécharger gratuitement sur l'App Store</a>
+  </p>
+
+  <!-- Sélecteur de public -->
+  <div class="selecteur">
+    <button class="btn-public actif" onclick="afficher('chercheurs', this)">
+      Chercheur·e ou<br>étudiant·e-chercheur·e
+    </button>
+    <button class="btn-public" onclick="afficher('scolaires', this)">
+      Personnel scolaire
+    </button>
+    <button class="btn-public" onclick="afficher('responsables', this)">
+      Responsable de revue
+    </button>
+  </div>
+
+  <!-- ── PUBLIC 1 : CHERCHEURS ── -->
+  <div id="chercheurs" class="contenu-public visible">
+
+    <p style="font-size:13px; color:#555; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #e2ddd5;">
+      L'app RHÉ vous donne accès au corpus de la revue et à plusieurs outils pour l'explorer autrement que par la lecture linéaire.
+    </p>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Explorer la géographie du corpus</p>
+        <p class="section-texte">La carte sémantique positionne l'ensemble des articles dans un espace à deux dimensions, selon leur proximité thématique. D'un coup d'œil, on voit où se concentrent les publications, quelles zones sont denses, quelles zones sont peu explorées. En touchant un point, on accède à l'article et aux articles sémantiquement les plus proches. C'est une façon de naviguer par affinité plutôt que par mots-clés.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Comparer plusieurs articles sur des dimensions précises</p>
+        <p class="section-texte">Le comparateur d'articles permet de mettre côte à côte plusieurs articles et de les analyser selon des caractéristiques choisies : approche méthodologique, contexte, population, résultats principaux, limites, etc. Les cellules sont remplies à la demande. Un outil utile pour construire, par exemple, une recension, préparer un cadre théorique, ou identifier des convergences et tensions dans la littérature publiée dans la RHÉ.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Interroger le corpus en langage naturel</p>
+        <p class="section-texte">HybridIA est un assistant conversationnel qui répond exclusivement à partir des articles publiés dans la RHÉ. Pas de réponses génériques : chaque réponse est ancrée dans le corpus, avec les sources citées. Utile pour explorer ce que la revue a publié sur un thème précis, identifier des auteurs ou des angles récurrents, ou tester une intuition de recherche avant de plonger dans les textes.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Lire et partager au-delà du français</p>
+        <p class="section-texte">Le résumé officiel de chaque article est disponible en anglais, espagnol et portugais, traduit à la demande via DeepL.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Voir ce que les autres lecteurs retiennent</p>
+        <p class="section-texte">Les réflexions publiques permettent à n'importe quel lecteur de l'app de partager une observation personnelle sur un article : une idée retenue, une surprise, un lien avec sa propre expérience. Une façon de voir comment la recherche résonne dans d'autres milieux.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="note-titre">Un mot sur ce que l'app ne fait pas</p>
+      <p class="note-texte">Pas de compte. Pas de courriel. Pas d'identification. Vos favoris, vos notes de lecture et vos réponses sauvegardées restent sur votre appareil. Seules les réflexions publiques transitent vers un serveur. Et elles sont associées à un identifiant anonyme généré localement.</p>
+    </div>
+
+  </div>
+
+  <!-- ── PUBLIC 2 : PERSONNELS SCOLAIRES ── -->
+  <div id="scolaires" class="contenu-public">
+
+    <p class="accroche-scolaire">La recherche en éducation produit des connaissances utiles à la pratique. Encore faut-il pouvoir y accéder facilement, et y trouver ce qui nous concerne.</p>
+
+    <p class="intro-suite">L'app iOS RHÉ donne accès aux articles de la Revue hybride de l'éducation et à plusieurs fonctionnalités conçues pour faire le pont entre la recherche et votre réalité de terrain.</p>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Trouver des articles liés à votre pratique</p>
+        <p class="section-texte">L'onglet Explorer propose des articles du corpus organisés selon les 13 compétences de la profession enseignante (MEQ, 2020). Choisissez une compétence et l'app vous présente des articles proches sémantiquement. Pas de requête à formuler. Pas de moteur de recherche à maîtriser.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Saisir l'essentiel d'un article en quelques minutes</p>
+        <p class="section-texte">Chaque article est accompagné d'une synthèse en quatre points, générée à partir du texte complet : trois implications pratiques et une nuance. De quoi évaluer rapidement si un article mérite une lecture complète ou offre déjà une réponse partielle suffisante.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Approfondir la réflexion</p>
+        <p class="section-texte">Depuis l'onglet À retenir, on peut générer à la demande quelques questions de réflexion sur l'enjeu de fond de l'article. Des questions formulées pour rester significatives, que vous soyez directement concerné par le sujet ou non. Utiles pour animer une discussion en équipe ou simplement prolonger votre propre lecture.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Poser une question, obtenir une réponse ancrée dans la recherche</p>
+        <p class="section-texte">HybridIA est un assistant conversationnel qui répond exclusivement à partir des articles publiés dans la RHÉ. Posez une question liée à votre pratique; l'agent puise dans le corpus pour vous répondre, sources à l'appui. Pas de réponses génériques : ce que vous lisez provient de recherches en éducation publiées et évaluées par des experts.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Voir ce que d'autres praticiens retiennent</p>
+        <p class="section-texte">Les réflexions publiques permettent à n'importe quel lecteur de l'app de partager une observation personnelle sur un article : une idée retenue, une surprise, un lien avec sa propre expérience. Une façon de voir comment la recherche résonne dans d'autres milieux.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="note-titre">Un mot sur ce que l'app ne fait pas</p>
+      <p class="note-texte">Pas de compte. Pas de courriel. Pas d'identification. Vos favoris, vos notes de lecture et vos réponses sauvegardées restent sur votre appareil. Seules les réflexions publiques transitent vers un serveur. Et elles sont associées à un identifiant anonyme généré localement.</p>
+    </div>
+
+  </div>
+
+  <!-- ── PUBLIC 3 : RESPONSABLES DE REVUE ── -->
+  <div id="responsables" class="contenu-public">
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <div class="responsable-corps">
+          <p>L'app RHÉ a été développée en parallèle des activités éditoriales de la revue, avec l'objectif d'offrir aux lecteurs une expérience de lecture enrichie et un accès facilité au corpus.</p>
+          <p>La documentation technique complète et le code source de l'application sont disponibles pour tout comité éditorial de revue scientifique intéressé à développer un outil similaire.</p>
+          <p>Pour en savoir plus : <a href="mailto:rhe@uqac.ca">rhe@uqac.ca</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Revue hybride de l'éducation — Université du Québec à Chicoutimi
+  </div>
+
+</div>
+
+<script>
+  function afficher(id, bouton) {
+    // Masquer tous les contenus
+    document.querySelectorAll('.contenu-public').forEach(function(el) {
+      el.classList.remove('visible');
+    });
+    // Désactiver tous les boutons
+    document.querySelectorAll('.btn-public').forEach(function(el) {
+      el.classList.remove('actif');
+    });
+    // Afficher le contenu choisi
+    document.getElementById(id).classList.add('visible');
+    // Activer le bouton cliqué
+    bouton.classList.add('actif');
+  }
+</script>
+
+</body>
+</html>
