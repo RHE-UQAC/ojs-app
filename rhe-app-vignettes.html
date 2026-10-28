@@ -1,0 +1,687 @@
+<meta charset="UTF-8">
+<title>App iOS RHÉ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:        #f7f5f0;
+    --surface:   #ffffff;
+    --border:    #e2ddd5;
+    --border-soft: #ede9e1;
+    --fg:        #1c1c1c;
+    --fg-mid:    #444;
+    --fg-muted:  #777;
+    --accent:    #7aa04d;
+    --accent-dk: #5a7a35;
+    --accent-bg: #eaf2e0;
+    --play-bg:   rgba(90, 122, 53, 0.88);
+    --play-hover: rgba(90, 122, 53, 1);
+    --thumb-bg:  #d8d3c9;
+    --shadow:    0 1px 4px rgba(0,0,0,.08), 0 3px 12px rgba(0,0,0,.05);
+    --shadow-hover: 0 4px 16px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #1a1a17;
+      --surface:   #252520;
+      --border:    #38382e;
+      --border-soft: #2e2e26;
+      --fg:        #f0ece4;
+      --fg-mid:    #b8b2a6;
+      --fg-muted:  #7a7670;
+      --accent:    #8fb85f;
+      --accent-dk: #a3cc72;
+      --accent-bg: #1e2c14;
+      --play-bg:   rgba(143, 184, 95, 0.9);
+      --play-hover: rgba(143, 184, 95, 1);
+      --thumb-bg:  #2e2e28;
+      --shadow:    0 1px 4px rgba(0,0,0,.3), 0 3px 12px rgba(0,0,0,.25);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #1a1a17;
+    --surface:   #252520;
+    --border:    #38382e;
+    --border-soft: #2e2e26;
+    --fg:        #f0ece4;
+    --fg-mid:    #b8b2a6;
+    --fg-muted:  #7a7670;
+    --accent:    #8fb85f;
+    --accent-dk: #a3cc72;
+    --accent-bg: #1e2c14;
+    --play-bg:   rgba(143, 184, 95, 0.9);
+    --play-hover: rgba(143, 184, 95, 1);
+    --thumb-bg:  #2e2e28;
+    --shadow:    0 1px 4px rgba(0,0,0,.3), 0 3px 12px rgba(0,0,0,.25);
+    --shadow-hover: 0 4px 16px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.65;
+    font-size: 15px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-block: 32px 64px;
+  }
+
+  /* ── En-tête ── */
+  .header {
+    border-top: 3px solid var(--accent);
+    padding-top: 20px;
+    margin-bottom: 20px;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .header-title {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.25;
+  }
+
+  .accroche-commune {
+    font-size: 14px;
+    color: var(--fg-mid);
+    line-height: 1.75;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-store-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+  .app-store-link:hover { text-decoration: underline; }
+
+  /* ── Sélecteur de public ── */
+  .selecteur {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .btn-public {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid var(--accent);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--accent);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.3;
+  }
+  .btn-public.actif {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-public:hover:not(.actif) {
+    background: var(--accent-bg);
+  }
+  .btn-public:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ── Contenu par public ── */
+  .contenu-public { display: none; }
+  .contenu-public.visible { display: block; }
+
+  /* ── Sections (chercheurs) ── */
+  .section {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-of-type { border-bottom: none; margin-bottom: 0; }
+  .accent-bar {
+    flex-shrink: 0;
+    width: 3px;
+    background: var(--accent);
+    align-self: stretch;
+  }
+  .section-body { flex: 1; min-width: 0; }
+  .section-titre {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--accent-dk);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .section-texte {
+    font-size: 13px;
+    color: var(--fg-mid);
+    line-height: 1.7;
+  }
+
+  /* ── Sections pill (scolaires) ── */
+  .pill-titre {
+    display: inline-block;
+    background: var(--accent-bg);
+    color: var(--accent-dk);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 12px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  /* ── Section responsable ── */
+  .responsable-corps {
+    font-size: 13.5px;
+    color: var(--fg-mid);
+    line-height: 1.8;
+  }
+  .responsable-corps p { margin-bottom: 14px; }
+  .responsable-corps p:last-child { margin-bottom: 0; }
+  .responsable-corps a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .responsable-corps a:hover { text-decoration: underline; }
+
+  /* ── Encadré note ── */
+  .note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+  }
+  .note-titre {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-dk);
+    margin-bottom: 5px;
+  }
+  .note-texte {
+    font-size: 12.5px;
+    color: var(--accent-dk);
+    line-height: 1.65;
+  }
+
+  /* ── Accroche scolaire ── */
+  .accroche-scolaire {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--accent-dk);
+    line-height: 1.75;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .intro-suite {
+    font-size: 13px;
+    color: var(--fg-mid);
+    line-height: 1.75;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Section vidéos ── */
+  .section-videos {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .videos-entete {
+    margin-bottom: 20px;
+  }
+  .videos-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .videos-titre {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.3;
+  }
+
+  /* ── Grille vignettes ── */
+  .videos-grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 480px) {
+    .videos-grille { grid-template-columns: 1fr; }
+  }
+
+  /* ── Carte vignette ── */
+  .video-carte {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.18s, transform 0.18s, border-color 0.18s;
+    cursor: pointer;
+  }
+  .video-carte:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .video-carte:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Vignette — zone image avec bouton play */
+  .video-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--thumb-bg);
+    overflow: hidden;
+  }
+
+  /* Motif de fond décoratif (onde) */
+  .video-thumb::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(122,160,77,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 75% 35%, rgba(122,160,77,.10) 0%, transparent 50%);
+  }
+
+  /* Icône play */
+  .play-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .play-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--play-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.15s;
+    backdrop-filter: blur(2px);
+  }
+  .video-carte:hover .play-circle {
+    background: var(--play-hover);
+    transform: scale(1.1);
+  }
+  .play-triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 15px;
+    border-color: transparent transparent transparent #fff;
+    margin-left: 3px;
+  }
+
+  /* Numéro dans le coin */
+  .video-num {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(0,0,0,0.28);
+    padding: 2px 7px;
+    line-height: 1.6;
+  }
+
+  /* Corps texte de la carte */
+  .video-corps {
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .video-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.35;
+  }
+  .video-cta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.2px;
+  }
+  .video-cta-arrow {
+    font-size: 12px;
+    line-height: 1;
+    transition: transform 0.15s;
+  }
+  .video-carte:hover .video-cta-arrow {
+    transform: translateX(3px);
+  }
+
+  /* ── Pied de page ── */
+  .footer {
+    margin-top: 36px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--fg-muted);
+    font-style: italic;
+    text-align: center;
+  }
+</style>
+
+<div class="page">
+
+  <!-- En-tête commun -->
+  <div class="header">
+    <div class="header-text">
+      <p class="eyebrow">Application iOS gratuite</p>
+      <p class="header-title">App iOS RHÉ</p>
+    </div>
+  </div>
+
+  <p class="accroche-commune">
+    Depuis juin 2026, la Revue hybride de l'éducation est accessible sur iPhone et iPad. L'app donne accès à l'ensemble du corpus et à plusieurs fonctionnalités conçues pour enrichir la lecture et faire le pont entre la recherche et la pratique.<br><br>
+    <a class="app-store-link" href="https://apps.apple.com/ca/app/revue-hybride-de-l%C3%A9ducation/id6777507627?l=fr-CA" target="_blank" rel="noopener">↓ Télécharger gratuitement sur l'App Store</a>
+  </p>
+
+  <!-- Sélecteur de public -->
+  <div class="selecteur">
+    <button class="btn-public actif" onclick="afficher('chercheurs', this)">
+      Chercheur·e ou<br>étudiant·e-chercheur·e
+    </button>
+    <button class="btn-public" onclick="afficher('scolaires', this)">
+      Personnel scolaire
+    </button>
+    <button class="btn-public" onclick="afficher('responsables', this)">
+      Responsable de revue
+    </button>
+  </div>
+
+  <!-- ── PUBLIC 1 : CHERCHEURS ── -->
+  <div id="chercheurs" class="contenu-public visible">
+
+    <p style="font-size:13px; color:var(--fg-muted); margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border);">
+      L'app RHÉ vous donne accès au corpus de la revue et à plusieurs outils pour l'explorer autrement que par la lecture linéaire.
+    </p>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Explorer la géographie du corpus</p>
+        <p class="section-texte">La carte sémantique positionne l'ensemble des articles dans un espace à deux dimensions, selon leur proximité thématique. D'un coup d'œil, on voit où se concentrent les publications, quelles zones sont denses, quelles zones sont peu explorées. En touchant un point, on accède à l'article et aux articles sémantiquement les plus proches. C'est une façon de naviguer par affinité plutôt que par mots-clés.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Comparer plusieurs articles sur des dimensions précises</p>
+        <p class="section-texte">Le comparateur d'articles permet de mettre côte à côte plusieurs articles et de les analyser selon des caractéristiques choisies : approche méthodologique, contexte, population, résultats principaux, limites, etc. Les cellules sont remplies à la demande. Un outil utile pour construire, par exemple, une recension, préparer un cadre théorique, ou identifier des convergences et tensions dans la littérature publiée dans la RHÉ.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Interroger le corpus en langage naturel</p>
+        <p class="section-texte">HybridIA est un assistant conversationnel qui répond exclusivement à partir des articles publiés dans la RHÉ. Pas de réponses génériques : chaque réponse est ancrée dans le corpus, avec les sources citées. Utile pour explorer ce que la revue a publié sur un thème précis, identifier des auteurs ou des angles récurrents, ou tester une intuition de recherche avant de plonger dans les textes.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Lire et partager au-delà du français</p>
+        <p class="section-texte">Le résumé officiel de chaque article est disponible en anglais, espagnol et portugais, traduit à la demande via DeepL.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="section-titre">Voir ce que les autres lecteurs retiennent</p>
+        <p class="section-texte">Les réflexions publiques permettent à n'importe quel lecteur de l'app de partager une observation personnelle sur un article : une idée retenue, une surprise, un lien avec sa propre expérience. Une façon de voir comment la recherche résonne dans d'autres milieux.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="note-titre">Un mot sur ce que l'app ne fait pas</p>
+      <p class="note-texte">Pas de compte. Pas de courriel. Pas d'identification. Vos favoris, vos notes de lecture et vos réponses sauvegardées restent sur votre appareil. Seules les réflexions publiques transitent vers un serveur. Et elles sont associées à un identifiant anonyme généré localement.</p>
+    </div>
+
+  </div>
+
+  <!-- ── PUBLIC 2 : PERSONNELS SCOLAIRES ── -->
+  <div id="scolaires" class="contenu-public">
+
+    <p class="accroche-scolaire">La recherche en éducation produit des connaissances utiles à la pratique. Encore faut-il pouvoir y accéder facilement, et y trouver ce qui nous concerne.</p>
+
+    <p class="intro-suite">L'app iOS RHÉ donne accès aux articles de la Revue hybride de l'éducation et à plusieurs fonctionnalités conçues pour faire le pont entre la recherche et votre réalité de terrain.</p>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Trouver des articles liés à votre pratique</p>
+        <p class="section-texte">L'onglet Explorer propose des articles du corpus organisés selon les 13 compétences de la profession enseignante (MEQ, 2020). Choisissez une compétence et l'app vous présente des articles proches sémantiquement. Pas de requête à formuler. Pas de moteur de recherche à maîtriser.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Saisir l'essentiel d'un article en quelques minutes</p>
+        <p class="section-texte">Chaque article est accompagné d'une synthèse en quatre points, générée à partir du texte complet : trois implications pratiques et une nuance. De quoi évaluer rapidement si un article mérite une lecture complète ou offre déjà une réponse partielle suffisante.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Approfondir la réflexion</p>
+        <p class="section-texte">Depuis l'onglet À retenir, on peut générer à la demande quelques questions de réflexion sur l'enjeu de fond de l'article. Des questions formulées pour rester significatives, que vous soyez directement concerné par le sujet ou non. Utiles pour animer une discussion en équipe ou simplement prolonger votre propre lecture.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Poser une question, obtenir une réponse ancrée dans la recherche</p>
+        <p class="section-texte">HybridIA est un assistant conversationnel qui répond exclusivement à partir des articles publiés dans la RHÉ. Posez une question liée à votre pratique; l'agent puise dans le corpus pour vous répondre, sources à l'appui. Pas de réponses génériques : ce que vous lisez provient de recherches en éducation publiées et évaluées par des experts.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <p class="pill-titre">Voir ce que d'autres praticiens retiennent</p>
+        <p class="section-texte">Les réflexions publiques permettent à n'importe quel lecteur de l'app de partager une observation personnelle sur un article : une idée retenue, une surprise, un lien avec sa propre expérience. Une façon de voir comment la recherche résonne dans d'autres milieux.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="note-titre">Un mot sur ce que l'app ne fait pas</p>
+      <p class="note-texte">Pas de compte. Pas de courriel. Pas d'identification. Vos favoris, vos notes de lecture et vos réponses sauvegardées restent sur votre appareil. Seules les réflexions publiques transitent vers un serveur. Et elles sont associées à un identifiant anonyme généré localement.</p>
+    </div>
+
+  </div>
+
+  <!-- ── PUBLIC 3 : RESPONSABLES DE REVUE ── -->
+  <div id="responsables" class="contenu-public">
+
+    <div class="section">
+      <div class="accent-bar"></div>
+      <div class="section-body">
+        <div class="responsable-corps">
+          <p>L'app RHÉ a été développée en parallèle des activités éditoriales de la revue, avec l'objectif d'offrir aux lecteurs une expérience de lecture enrichie et un accès facilité au corpus.</p>
+          <p>La documentation technique complète et le code source de l'application sont disponibles pour tout comité éditorial de revue scientifique intéressé à développer un outil similaire.</p>
+          <p>Pour en savoir plus : <a href="mailto:rhe@uqac.ca">rhe@uqac.ca</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SECTION VIDÉOS (en bas) ── -->
+  <div class="section-videos">
+    <div class="videos-entete">
+      <p class="videos-eyebrow">Visites guidées</p>
+      <p class="videos-titre">Visualisez toutes les fonctionnalités en quelques minutes</p>
+    </div>
+
+    <div class="videos-grille">
+
+      <a class="video-carte" href="https://drive.google.com/file/d/1qxAUoIF1Vl_mXDhBkoJ0dsR9KBxWtt7i/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">01</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">Page d'accueil de l'app</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="video-carte" href="https://drive.google.com/file/d/1BxrtiilAYcDgq7HqEp6H51uZ6C17VMag/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">02</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">Fonctionnalités associées à chaque article</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="video-carte" href="https://drive.google.com/file/d/15uVOHPAx4FbiN7ILXi525c7-zZ4zH8A0/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">03</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">Consultation des archives</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="video-carte" href="https://drive.google.com/file/d/1r4tK5Kg9ZWTtc6ZYSA408Mgkd3kzWDeC/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">04</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">HybridIA — le robot conversationnel de la revue</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="video-carte" href="https://drive.google.com/file/d/1VGlVOH-4V0SvVTLhsOoUyaT10ZMZwVjM/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">05</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">Différentes façons d'explorer le corpus</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+      <a class="video-carte" href="https://drive.google.com/file/d/1q6yJ8EweuUqMhY33IGLKW-ujA6S1sOLa/view?usp=sharing" target="_blank" rel="noopener">
+        <div class="video-thumb">
+          <span class="video-num">06</span>
+          <div class="play-btn">
+            <div class="play-circle"><div class="play-triangle"></div></div>
+          </div>
+        </div>
+        <div class="video-corps">
+          <p class="video-label">Votre espace personnel</p>
+          <span class="video-cta">Voir la vidéo <span class="video-cta-arrow">→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    Revue hybride de l'éducation — Université du Québec à Chicoutimi
+  </div>
+
+</div>
+
+<script>
+  function afficher(id, bouton) {
+    document.querySelectorAll('.contenu-public').forEach(function(el) {
+      el.classList.remove('visible');
+    });
+    document.querySelectorAll('.btn-public').forEach(function(el) {
+      el.classList.remove('actif');
+    });
+    document.getElementById(id).classList.add('visible');
+    bouton.classList.add('actif');
+  }
+</script>
